@@ -21,15 +21,15 @@ def calculate_demographic_data(print_data=True):
     # What percentage of people without advanced education make more than 50K?
 
     # with and without `Bachelors`, `Masters`, or `Doctorate`
-    higher_education = df[df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])]
-    lower_education = df[~df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])]
+    higher_education = df.loc[df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])]
+    lower_education = df.loc[~df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])]
 
     # percentage with salary >50K
     filer_higher_edu = higher_education[higher_education['salary'] == '>50K']['salary'].count() / \
-                       higher_education.shape[0]
+                       higher_education.shape[0] * 100
     higher_education_rich = round(filer_higher_edu, 2)
     filer_lower_edu = lower_education[lower_education['salary'] == '>50K']['salary'].count() / \
-                      lower_education.shape[0]
+                      lower_education.shape[0] * 100
     lower_education_rich = round(filer_lower_edu, 2)
 
     # What is the minimum number of hours a person works per week (hours-per-week feature)?
@@ -39,8 +39,10 @@ def calculate_demographic_data(print_data=True):
     filter_num_min_workers = df[df['hours-per-week'] == 1]['hours-per-week'].count()
     num_min_workers = round(filter_num_min_workers, 1)
 
-    filter_rich_percentage = df[(df['hours-per-week'] == 1) & (df['salary'] == '>50K')].shape[0] / num_min_workers
+    filter_rich_percentage = (float(df[(df['hours-per-week'] == min_work_hours) & (df['salary'] == '>50K')].shape[0]) /
+                             num_min_workers) * 100
     rich_percentage = round(filter_rich_percentage, 1)
+
 
     # What country has the highest percentage of people that earn >50K?
     # BeauCarnes
@@ -89,5 +91,5 @@ def calculate_demographic_data(print_data=True):
 calculate_demographic_data()
 
 
-# REFEREBCES
+# REFERENCES
 # 1. BeauCarnes
